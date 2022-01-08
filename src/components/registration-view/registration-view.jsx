@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-export function LoginView(props) {
+export function RegistrationView(props) {
   const [ username, setUsername ] = useState('');
   const [ password, setPassword ] = useState('');
+  const [ email, setEmail ] = useState('');
+  const [ Birthdate, setBirthdate ] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -23,10 +25,18 @@ export function LoginView(props) {
         Password:
         <input type="password" value={password} onChange={e => setPassword(e.target.value)} />
       </label>
+      <label>
+          email:
+         <input type="text" value={email} onChange={e => setEmail(e.target.value)} /> 
+      </label>
+      <label>
+          Birthdate:
+         <input type="date" value={Birthdate} onChange={e => setBirthdate(e.target.value)} />
+      </label>
       <button type="submit" onClick={handleSubmit}>Submit</button>
     </form>
     <button>
-        <a>New user? Click here to register!</a>
+        <a>Current user? Click here to sign in!</a>
       </button></> 
   );
 }

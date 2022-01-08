@@ -1,6 +1,8 @@
 import React from 'react';
 import axios from 'axios';
+import PropTypes from 'prop-types';
 
+import { RegistrationView } from '../registration-view/registration-view';
 import { LoginView } from '../login-view/login-view';
 import { MovieCard } from '../movie-card/movie-card';
 import { MovieView } from '../movie-view/movie-view';
@@ -41,7 +43,7 @@ export class MainView extends React.Component {
     }  
 
     render() {
-        const { movies, selectedMovie } = this.state;
+        const { movies, selectedMovie, user } = this.state;
 //with no user logged in LoginView will show if one is logged in the user parameters are passed as prop to LoginView
         if (!user) return <LoginView onLoggedIn={user => this.onLoggedIn(user)} />;      
 
