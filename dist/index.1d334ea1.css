@@ -1,0 +1,22 @@
+html,
+body {
+  background: #fc4c4f !important;
+  height: 100%;
+}
+
+.btn-primary {
+  background: #fc4c4f !important;
+  outline: none !important;
+}
+
+.navbar-brand {
+  font-size: 70px !important;
+}
+.list {
+  background-color: #000;
+}
+.btn {
+  outline-color: #fc4c4f;
+  box-shadow: none !important;
+}
+/*# sourceMappingURL=index.1d334ea1.css.map */

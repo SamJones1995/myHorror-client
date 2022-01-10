@@ -8,12 +8,12 @@ export class MovieCard extends React.Component {
         const { movie, onMovieClick } = this.props;
 
         return (
-            <Card>
+            <Card bg="secondary" text="light" border="light">
                 <Card.Img variant='top' src='{movie.ImagePath' />
                 <Card.Body>
                     <Card.Title>{movie.Title}</Card.Title>
                     <Card.Text>{movie.Description}</Card.Text>
-                    <Button onClick={() => onMovieClick(movie)} variant="link">Open</Button>
+                    <Button onClick={() => onMovieClick(movie)} variant="primary">Open</Button>
                 </Card.Body>
             </Card>
         );
@@ -22,20 +22,20 @@ export class MovieCard extends React.Component {
 
 MovieCard.propTypes = {
     movie: PropTypes.shape({
-        Title: PropTypes.string.isRequired,
-        Description: PropTypes.string.isRequired,
-        Genre: PropTypes.shape.isRequired({
-            Name: PropTypes.string,
-            Description: PropTypes.string    
-        }),
-        Director: PropTypes.shape.isRequired({
-            Name: PropTypes.string,
-            Bio: PropTypes.string,
-            Birthyear: PropTypes.instanceOf(Date),
-            Deathyear: PropTypes.instanceOf(Date),
-            Featured: Proptypes.oneOf(['true', 'false'])
-        }),
-        ImagePath: PropTypes.string.isRequired
-    }).isRequired,
-    onMovieClick: PropTypes.func.isRequired
-};
+      Title: PropTypes.string.isRequired,
+      Description: PropTypes.string.isRequired,
+      Genre: PropTypes.shape({
+        Name: PropTypes.string.isRequired,
+        Description: PropTypes.string.isRequired
+      }),
+      Director: PropTypes.shape({
+        Name: PropTypes.string.isRequired,
+        Bio: PropTypes.string.isRequired,
+        Birthyear: PropTypes.string,
+        Deathyear: PropTypes.string
+      }),
+      Featured: PropTypes.bool,
+      ImagePath: PropTypes.string.isRequired
+      }).isRequired,
+      onBackClick: PropTypes.func
+  };

@@ -1,5 +1,14 @@
-$color: steelblue;
+html,
+body, {
+  background: #fc4c4f !important;
+  height: 100%;
+}
 
-.my-flix {
-  color: $color;
+.btn-primary {
+  background: #fc4c4f !important;
+  outline: none !important;
+}
+
+.navbar-brand {
+  font-size: 70px !important; 
 }

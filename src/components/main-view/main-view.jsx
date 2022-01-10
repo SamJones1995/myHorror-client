@@ -1,8 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import PropTypes from 'prop-types';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+import {Navbar, Nav, Form, Button, Card, CardGroup, Containter, Col, Row, Container} from 'react-bootstrap';
 
 import { RegistrationView } from '../registration-view/registration-view';
 import { LoginView } from '../login-view/login-view';
@@ -52,7 +51,17 @@ export class MainView extends React.Component {
         if (movies.length === 0) return <div className="main-view"/>;
 /*If the state of `selectedMovie` is not null, that selected movie will be returned otherwise, all *movies will be returned*/
         return (
-          <div className="main-view">
+          <div className="main-view" fluid style={{paddingTop: '0.75rem'}}>
+            <Navbar variant="dark">
+              <Container>
+              <Navbar.Brand>MyHorror</Navbar.Brand>
+                  <Nav>
+                  <Nav.Link>Profile</Nav.Link>
+                  <Nav.Link>Update Profile</Nav.Link>
+                  <Nav.Link>Logout</Nav.Link>
+                  </Nav>
+              </Container>
+              </Navbar>
             {selectedMovie
               ? (
               <Row className="justify-content-md-center">
@@ -76,3 +85,23 @@ export class MainView extends React.Component {
         );
     }    
 }
+
+MainView.propTypes = {
+  movie: PropTypes.shape({
+    Title: PropTypes.string.isRequired,
+    Description: PropTypes.string.isRequired,
+    Genre: PropTypes.shape({
+      Name: PropTypes.string.isRequired,
+      Description: PropTypes.string.isRequired
+    }),
+    Director: PropTypes.shape({
+      Name: PropTypes.string.isRequired,
+      Bio: PropTypes.string.isRequired,
+      Birthyear: PropTypes.date,
+      Deathyear: PropTypes.date
+    }),
+    Featured: PropTypes.bool,
+    ImagePath: PropTypes.string.isRequired
+    }).isRequired,
+    onBackClick: PropTypes.func.isRequired
+};
