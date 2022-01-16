@@ -46,6 +46,14 @@ export class MainView extends React.Component {
         this.getMovies(authData.token);
     }  
 
+    onLoggedOut() {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      this.setState({
+        user: null
+      });
+    }
+
     getMovies(token) {
       axios.get('https://myhorrormovies.herokuapp.com/horrorMovies', {
         headers: { Authorization: `Bearer ${token}`}
@@ -63,7 +71,7 @@ export class MainView extends React.Component {
     render() {
         const { movies, selectedMovie, user } = this.state;
 //with no user logged in LoginView will show if one is logged in the user parameters are passed as prop to LoginView
-        if (!user) return <LoginView onLoggedIn={user => this.onLoggedIn(user)} />;      
+        if (!user) return <RegistrationView onLoggedIn={user => this.onLoggedIn(user)} />;      
 
         if (movies.length === 0) return <div className="main-view"/>;
 /*If the state of `selectedMovie` is not null, that selected movie will be returned otherwise, all *movies will be returned*/
@@ -75,7 +83,7 @@ export class MainView extends React.Component {
                   <Nav>
                   <Nav.Link>Profile</Nav.Link>
                   <Nav.Link>Update Profile</Nav.Link>
-                  <Nav.Link>Logout</Nav.Link>
+                  <Nav.Link onClick={() => { this.onLoggedOut() }}>Logout</Nav.Link>
                   </Nav>
               </Container>
               </Navbar>

@@ -29,7 +29,7 @@ export class MovieView extends React.Component {
                             <span className="value">{movie.Director.Name}</span>   
                         </div> 
                     </Card.Text>
-                    <Button variant="primary" onClick={() => { onBackClick(null); }}>Back</Button>
+                    <Button variant="light" style={{ color: "white" }} onClick={() => { onBackClick(null); }}>Back</Button>
                 </Card.Body>
             </Card>
         </div>

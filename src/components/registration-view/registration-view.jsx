@@ -7,15 +7,50 @@ export function RegistrationView(props) {
   const [ password, setPassword ] = useState('');
   const [ email, setEmail ] = useState('');
   const [ Birthdate, setBirthdate ] = useState('');
+  const [ usernameErr, setUsernameErr ] = useState('');
+  const [ passwordErr, setPasswordErr ] = useState('');
+  const [ emailErr, setemailErr ] = useState('');
+  const [ BirthdateErr, setBirthdateErr ] = useState('');
+
+  const validate = () => {
+    let isReq = true;
+    if(!username){
+     setUsernameErr('Username Required');
+     isReq = false;
+    }else if(username.length < 6){
+     setUsernameErr('Username must be 6 characters long');
+     isReq = false;
+    }
+    if(!password){
+     setPasswordErr('Password Required');
+     isReq = false;
+    }else if(password.length < 8){
+     setPasswordErr('Password must be 8 characters long');
+     isReq = false;
+    }
+    if(!email){
+      setemailErr('Please user valid email')
+    } else if(email.indexOf('@') === -1){
+      setemailErr('Please user valid email')
+      isReq = false;
+    }
+    if(!Birthdate){
+      setBirthdateErr('Please enter birthdate')
+      isReq = false;
+    }
+    return isReq;
+}
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(username, password);
-    /* Send a request to the server for authentication */
-    /* then call props.onLoggedIn(username) */
-     props.onLoggedIn(username);
-  };
-
+    const isReq = validate();
+    if(isReq ) {
+      console.log(username, password);
+      /* Send a request to the server for authentication */
+      /* then call props.onLoggedIn(username) */
+      props.onLoggedIn(username);
+    };
+  }  
   return (
     <div className="registration-view">
     <Navbar variant="dark">
@@ -44,6 +79,7 @@ export function RegistrationView(props) {
                       onChange={e => setUsername(e.target.value)} 
                       required
                       placeholder="Enter a username"/>
+                      {usernameErr && <p>{usernameErr}</p>}
                     </Form.Group>
                     <Form.Group>
                       <Form.Label>Password:</Form.Label>
@@ -54,6 +90,7 @@ export function RegistrationView(props) {
                       required
                       minLength="8"
                       placeholder="Your password must be at least 8 characters"/>
+                      {passwordErr && <p>{passwordErr}</p>}
                     </Form.Group>
                   <Form.Group>
                       <Form.Label>Email:</Form.Label>
@@ -63,6 +100,7 @@ export function RegistrationView(props) {
                       onChange={e => setEmail(e.target.value)} 
                       required
                       placeholder="Enter your email"/> 
+                      {emailErr && <p>{emailErr}</p>}
                   </Form.Group>
                   <Form.Group>
                       <Form.Label>Birthdate:</Form.Label>
@@ -72,8 +110,9 @@ export function RegistrationView(props) {
                       onChange={e => setBirthdate(e.target.value)} 
                       required
                       placeholder="Enter your Birthdate"/>
+                      {BirthdateErr && <p>{BirthdateErr}</p>}
                   </Form.Group>
-                  <Button variant="primary" type="submit"
+                  <Button variant="light" style={{ color: "white" }} type="submit"
                       onClick={handleSubmit}>
                         Submit
                   </Button> 
