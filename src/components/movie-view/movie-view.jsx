@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {Navbar, Nav, Form, Button, Card, CardGroup, Containter, Col, Row, Container, ListGroupItem, ListGroup} from 'react-bootstrap';
+import { Link } from "react-router-dom";
 
 import "./movie-view.scss"
 
@@ -21,11 +22,15 @@ export class MovieView extends React.Component {
                             <span className="value">{movie.Description}</span>
                         </div>
                         <div className="movie-genre-name">
-                            <span className="label">Genre: </span>
+                            <Link to={`/genres/${movie.Genre.Name}`}>
+                                <Button variant="link">Genre</Button>
+                            </Link>
                             <span className="value">{movie.Genre.Name}</span>   
                         </div> 
                         <div className="movie-director">
-                            <span className="label">Director: </span>
+                            <Link to={`/directors/${movie.Director.Name}`}>
+                                <Button variant="link">Director: </Button>
+                            </Link>
                             <span className="value">{movie.Director.Name}</span>   
                         </div> 
                     </Card.Text>
