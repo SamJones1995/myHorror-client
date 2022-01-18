@@ -55,17 +55,7 @@ export function LoginView(props) {
 
   return (
     <div className="login-view">
-      <Navbar variant="dark">
-      <Container>
-      <Navbar.Brand>MyHorror</Navbar.Brand>
-          <Nav>
-          <Nav.Link>Profile</Nav.Link>
-          <Nav.Link>Update Profile</Nav.Link>
-          <Nav.Link>Logout</Nav.Link>
-          </Nav>
-      </Container>
-      </Navbar>
-    
+   
     <Container fluid style={{paddingTop: '0.75rem'}}>
       <Row>
         <Col>

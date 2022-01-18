@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import {Navbar, Nav, Form, Button, Card, CardGroup, Containter, Col, Row, Container} from 'react-bootstrap';
+import axios from 'axios';
 
 export function RegistrationView(props) {
   const [ username, setUsername ] = useState('');
@@ -46,23 +47,25 @@ export function RegistrationView(props) {
     const isReq = validate();
     if(isReq ) {
       console.log(username, password);
-      /* Send a request to the server for authentication */
-      /* then call props.onLoggedIn(username) */
+      axios.post('https://myhorrormovies.herokuapp.com/users', {
+        Username: username,
+        Password: password,
+        email: email,
+        Birthdate: birthday
+      })
+      .then(response => {
+        const data = response.data;
+        console.log(data);
+        window.open('/', '_self');// the second argument '_self' is necessary so that the page will open in the current tab
+      })
+      .catch(e => {
+        console.log('error registering this user')
+      });
       props.onLoggedIn(username);
     };
   }  
   return (
     <div className="registration-view">
-    <Navbar variant="dark">
-      <Container>
-      <Navbar.Brand>MyHorror</Navbar.Brand>
-          <Nav>
-          <Nav.Link>Profile</Nav.Link>
-          <Nav.Link>Update Profile</Nav.Link>
-          <Nav.Link>Logout</Nav.Link>
-          </Nav>
-      </Container>
-      </Navbar>
     <Container fluid style={{paddingTop: '0.75rem'}}>
       <Row>
         <Col>
