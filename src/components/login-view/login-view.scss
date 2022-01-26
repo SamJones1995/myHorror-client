@@ -1,5 +1,12 @@
 $color: steelblue;
 
-.my-flix {
-  color: $color;
+body {
+  background: #fc4c4f !important;
+  height: 100%;
+}
+
+.btn-light {
+  background: #fc4c4f !important;
+  color: white;
+  margin-top: 20px;
 }

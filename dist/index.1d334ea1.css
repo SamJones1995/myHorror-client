@@ -1,0 +1,21 @@
+body {
+  background: #fc4c4f !important;
+  height: 100%;
+}
+
+.btn-light {
+  background: #fc4c4f !important;
+  color: white;
+  margin-top: 20px;
+}
+.my-flix {
+  color: steelblue;
+}
+
+
+
+.btn {
+  outline-color: #fc4c4f;
+  box-shadow: none !important;
+}
+/*# sourceMappingURL=index.1d334ea1.css.map */
