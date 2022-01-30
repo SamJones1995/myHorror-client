@@ -979,7 +979,7 @@ _reactDomDefault.default.render(/*#__PURE__*/ _reactDefault.default.createElemen
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react/jsx-runtime":"8xIwr","react":"6TuXu","react-dom":"gkWJK","./components/main-view/main-view":"2zHas","./index.scss":"jUTZ8","@parcel/transformer-js/src/esmodule-helpers.js":"jGvvH","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5JUFH","react-bootstrap/Container":"2PRIq"}],"8xIwr":[function(require,module,exports) {
+},{"react/jsx-runtime":"8xIwr","react":"6TuXu","react-dom":"gkWJK","./components/main-view/main-view":"2zHas","react-bootstrap/Container":"2PRIq","./index.scss":"jUTZ8","@parcel/transformer-js/src/esmodule-helpers.js":"jGvvH","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5JUFH"}],"8xIwr":[function(require,module,exports) {
 'use strict';
 module.exports = require('./cjs/react-jsx-runtime.development.js');
 
@@ -40185,7 +40185,7 @@ class MovieCard extends _reactDefault.default.Component {
             children: [
                 /*#__PURE__*/ _jsxRuntime.jsx(_cardDefault.default.Img, {
                     variant: "top",
-                    src: "{movie.ImagePath}",
+                    src: movie.ImagePath,
                     __source: {
                         fileName: "src/components/movie-card/movie-card.jsx",
                         lineNumber: 14
