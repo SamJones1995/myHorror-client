@@ -1,18 +1,18 @@
 import React from 'react';
 import axios from 'axios';
 
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 import { connect } from 'react-redux';
 import {Navbar, Nav, Form, Button, Card, CardGroup, Containter, Col, Row, Container} from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
-import { setMovies } from '../../actions/actions';
+import { setMovies, setUser } from '../../actions/actions';
 import { RegistrationView } from '../registration-view/registration-view';
 import { LoginView } from '../login-view/login-view';
 import { MovieView } from '../movie-view/movie-view';
 import { GenreView } from '../genre-view/genre-view';
 import { DirectorView } from '../director-view/director-view';
-import { MoviesList } from '../movies-list/movies-list';
+import  MoviesList  from '../movies-list/movies-list';
 import { ProfileView } from '../profile-view/profile-view';
 
 class MainView extends React.Component {
@@ -20,8 +20,8 @@ class MainView extends React.Component {
     constructor(){
         super();
         this.state = {
-            user: null
-        };
+          user: null
+      };
     }
 
     getMovies(token) {
@@ -43,18 +43,20 @@ class MainView extends React.Component {
         this.setState({
           user: localStorage.getItem('user')
         });
+        this.getUserDetails(accessToken);
         this.getMovies(accessToken);
       }
     }
 //updates default 'user' property to that of 'particular user' on log in
     onLoggedIn(authData) {
         console.log(authData);
-        this.setState({
-          user: authData.user.Username
-        });
 
         localStorage.setItem('token', authData.token);
         localStorage.setItem('user', authData.user.Username);
+        console.log(authData)
+        this.setState({
+          user: authData.user.Username
+        });
         this.getMovies(authData.token);
     }  
 
@@ -66,6 +68,17 @@ class MainView extends React.Component {
       });
     }
 
+    getUserDetails(token) {
+      let userLocalStorage = localStorage.getItem('user');
+      axios.get(`https://myhorrormovies.herokuapp.com/users/${userLocalStorage}`, {
+          headers: { Authorization: `Bearer ${token}`}
+      }).then(response => {
+          this.props.setUser(response.data);
+          console.log(response.data)
+      }).catch(function (error) {
+          console.log(error);
+      });
+  }
     
     render() {
       let { movies } = this.props;
@@ -91,14 +104,15 @@ class MainView extends React.Component {
                         </Navbar.Collapse> 
                     )}
                 </Navbar>
+                
             <Row className="main-view justify-content-md-center">
 
             <Route exact path="/" render={() => {
-               if (!user) return 
-                <Col>
+               if (!user) return (
+                <Col md={8}>
                   <LoginView  onLoggedIn={user => this.onLoggedIn(user)} />
                 </Col>
-                
+               );
               
                if (movies.length === 0) return <div className="main-view" />;
 
@@ -169,11 +183,9 @@ class MainView extends React.Component {
                 </Col>
               );
               if (movies.length === 0) return <div className="main-view" />;
-              return (
-              
-              <Col>
+              return ( <Col>
                 <ProfileView
-               user = {this.state.user}
+               user = {user}
                movies = {movies}
                 onBackClick={() => history.goBack()} />
               </Col>
@@ -186,8 +198,8 @@ class MainView extends React.Component {
 }
 
 let mapStateToProps = state => {
-  return { movies: state.movies }
+  return { movies: state.movies}
 }
 
-export default connect(mapStateToProps, { setMovies } )(MainView);
+export default connect(mapStateToProps, { setMovies, setUser } )(MainView);
 

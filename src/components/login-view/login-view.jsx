@@ -3,45 +3,34 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import {Navbar, Nav, Form, Button, Card, CardGroup, Col, Row, Container} from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 // SCSS Import
 import "./login-view.scss";
 
 export function LoginView(props) {
-  const [ username, setUsername ] = useState('');
-  const [ password, setPassword ] = useState('');
+  const [ Username, setUsername ] = useState('');
+  const [ Password, setPassword ] = useState('');
   //validation declarations 
-  const [ usernameErr, setUsernameErr ] = useState('');
-  const [ passwordErr, setPasswordErr ] = useState('');
-
-  // validate user inputs
-  const validate = () => {
-    let isReq = true;
-    if(!username){
-      setUsernameErr('Username Required');
-      isReq = false;
-    }else if(username.length < 6){
-      setUsernameErr('Username must be 6 characters long');
-      isReq = false;
-    }
-    if(!password){
-      setPasswordErr('Password Required');
-      isReq = false;
-    }else if(password.length < 8){
-      setPassword('Password must be 8 characters long');
-      isReq = false;
-    }
-
-    return isReq;
-  }
+  const [ validated, setValidated ] = useState(false);
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    const isReq = validate();
-    if(isReq) {
+    const form = e.currentTarget.parentNode;
+        // Use checkValidity() to check for any validation errors in the form (based on what is described in the form elements attributes)
+        if (form.checkValidity() === false) {
+            // If checkValidity() returns false, stop the submission. stopPropagation() is used to stop propagation of the same event being called
+            e.preventDefault();
+            e.stopPropagation();
+            // Even if the form is not valid, the validated state variable needs to be set to true. This will toggle any validation styles on the forms elements (as per React Bootstraps documentation)
+            setValidated(true);
+        } else {
+            // e.preventDefault() will stop the page from refreshing once the submit button is clicked (which would be the default behaviour)
+            e.preventDefault();
+            // Change the validated state variable to true to mark the form as validated
+            setValidated(true);
     /* Send a request to the server for authentication */
       axios.post('https://myhorrormovies.herokuapp.com/login', {
-        Username: username,
-        Password: password
+        Username: Username,
+        Password: Password
       })
       .then(response => {
         const data = response.data;
@@ -62,16 +51,16 @@ export function LoginView(props) {
             <Card bg="secondary" text="light" border="light">
               <Card.Body>
                 <Card.Title>Welcome to MyHorror!</Card.Title>
-                <Form>
+                <Form noValidate validated={validated}>
                   <Form.Group controlId="formUsername">
                     <Form.Label>Username:</Form.Label>
                     <Form.Control type="text" onChange={e => setUsername(e.target.value)} />
-                    {usernameErr && <p>{usernameErr}</p>}
+                    <Form.Control.Feedback type="invalid">Please enter a username</Form.Control.Feedback>
                   </Form.Group>
                   <Form.Group controlId="formPassword">
                     <Form.Label>Password:</Form.Label>
                     <Form.Control type="password" onChange={e => setPassword(e.target.value)} />
-                    {passwordErr && <p>{passwordErr}</p>}
+                    <Form.Control.Feedback type="invalid">Please enter a password</Form.Control.Feedback>
                   </Form.Group>
                   <Button variant="light" style={{ color: "white" }} type="submit" onClick={handleSubmit}>
                     Submit
@@ -91,9 +80,13 @@ export function LoginView(props) {
 }
 
 LoginView.propTypes = {
-  user: PropTypes.shape({
-    Username: PropTypes.string.isRequired,
-    Password: PropTypes.string.isRequired,
-  }),
   onLoggedIn: PropTypes.func.isRequired,
 };
+
+let mapDispatchToProps = (dispatch) => {
+  return({
+      handleSubmit: (Username, Password) => dispatch(handleSubmit(Username, Password))
+  })
+};
+
+export default connect(null, mapDispatchToProps)(LoginView);
