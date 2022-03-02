@@ -8,14 +8,16 @@ import { connect } from 'react-redux';
 import "./login-view.scss";
 
 export function LoginView(props) {
-  const [ Username, setUsername ] = useState('');
-  const [ Password, setPassword ] = useState('');
+  const [ username, setUsername ] = useState('');
+  const [ password, setPassword ] = useState('');
   //validation declarations 
   const [ validated, setValidated ] = useState(false);
 
   const handleSubmit = (e) => {
-    const form = e.currentTarget.parentNode;
+    //const form = e.currentTarget.parentNode;
         // Use checkValidity() to check for any validation errors in the form (based on what is described in the form elements attributes)
+        const form = e.currentTarget.parentNode;
+        
         if (form.checkValidity() === false) {
             // If checkValidity() returns false, stop the submission. stopPropagation() is used to stop propagation of the same event being called
             e.preventDefault();
@@ -29,14 +31,17 @@ export function LoginView(props) {
             setValidated(true);
     /* Send a request to the server for authentication */
       axios.post('https://myhorrormovies.herokuapp.com/login', {
-        Username: Username,
-        Password: Password
+        Username: username,
+        Password: password
       })
       .then(response => {
         const data = response.data;
+        console.log(data);
         props.onLoggedIn(data);
       })
       .catch(e => {
+        //seems to be some issues with the client-side validation, alert set up for now
+        alert('Invalid login');
         console.log('no such user')
       });
     }  
@@ -54,7 +59,7 @@ export function LoginView(props) {
                 <Form noValidate validated={validated}>
                   <Form.Group controlId="formUsername">
                     <Form.Label>Username:</Form.Label>
-                    <Form.Control type="text" onChange={e => setUsername(e.target.value)} />
+                    <Form.Control type="text"  onChange={e => setUsername(e.target.value)} />
                     <Form.Control.Feedback type="invalid">Please enter a username</Form.Control.Feedback>
                   </Form.Group>
                   <Form.Group controlId="formPassword">
@@ -80,12 +85,13 @@ export function LoginView(props) {
 }
 
 LoginView.propTypes = {
-  onLoggedIn: PropTypes.func.isRequired,
+  
+  onLoggedIn: PropTypes.func.isRequired
 };
 
 let mapDispatchToProps = (dispatch) => {
   return({
-      handleSubmit: (Username, Password) => dispatch(handleSubmit(Username, Password))
+      handleSubmit: (username, password) => dispatch(handleSubmit(username, password))
   })
 };
 
