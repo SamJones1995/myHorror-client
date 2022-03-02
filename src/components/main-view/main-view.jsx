@@ -19,14 +19,46 @@ class MainView extends React.Component {
 
     constructor(){
         super();
-        this.state = {
-          user: null
-      };
+      //this.getUserDetails = this.getUserDetails.bind(this)
     }
+
+    componentDidMount(){
+      let accessToken = localStorage.getItem('token');
+      if (accessToken !==null) {
+        this.getUserDetails(accessToken);
+        //this.setState({
+        //  user: localStorage.getItem('user')
+        //});
+        this.getMovies(accessToken);
+      }
+    }
+
+      //updates default 'user' property to that of 'particular user' on log in
+    onLoggedIn(authData) {
+      localStorage.setItem('token', authData.token);
+      localStorage.setItem('user', authData.user.Username);
+      // Trigger the setUser action to update the store with this user
+      this.props.setUser(authData.user);
+        this.getMovies(authData.token);
+    }
+    
+    getUserDetails() {
+      let userLocalStorage = localStorage.getItem('user');
+      let token = localStorage.getItem('token');
+      axios.get(`https://myhorrormovies.herokuapp.com/users/${userLocalStorage}`, {
+          headers: { Authorization: `Bearer ${token}`}
+      }).then((response) => {
+        this.props.setUser(response.user);
+          console.log(response.data)
+      }).catch(function (error) {
+          console.log(error);
+      });
+  }
 
     getMovies(token) {
       axios.get('https://myhorrormovies.herokuapp.com/horrorMovies', {
-        headers: { Authorization: `Bearer ${token}`}
+        headers: { Authorization: `Bearer ${token}`, "Cross-Origin-Resource-Policy": "cross-origin"}
+        
       })
       .then(response => {
         //Assigns the result to the state
@@ -35,54 +67,19 @@ class MainView extends React.Component {
       .catch(function (error) {
         console.log(error);
       });
-    }  
-    
-    componentDidMount(){
-      let accessToken = localStorage.getItem('token');
-      if (accessToken !==null) {
-        this.setState({
-          user: localStorage.getItem('user')
-        });
-        this.getUserDetails(accessToken);
-        this.getMovies(accessToken);
-      }
-    }
-//updates default 'user' property to that of 'particular user' on log in
-    onLoggedIn(authData) {
-        console.log(authData);
-
-        localStorage.setItem('token', authData.token);
-        localStorage.setItem('user', authData.user.Username);
-        console.log(authData)
-        this.setState({
-          user: authData.user.Username
-        });
-        this.getMovies(authData.token);
-    }  
+    } 
 
     onLoggedOut() {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
-      this.setState({
-        user: null
-      });
+      this.props.setUser(null);
     }
 
-    getUserDetails(token) {
-      let userLocalStorage = localStorage.getItem('user');
-      axios.get(`https://myhorrormovies.herokuapp.com/users/${userLocalStorage}`, {
-          headers: { Authorization: `Bearer ${token}`}
-      }).then(response => {
-          this.props.setUser(response.data);
-          console.log(response.data)
-      }).catch(function (error) {
-          console.log(error);
-      });
-  }
+    
     
     render() {
-      let { movies } = this.props;
-      let { user } = this.state;
+      let { movies, user } = this.props;
+      
 //with no user logged in LoginView will show if one is logged in the user parameters are passed as prop to LoginView
 
         
@@ -97,8 +94,8 @@ class MainView extends React.Component {
                     </Navbar.Brand>
                     {user && (
                         <Navbar.Collapse className="justify-content-end">
-                            <Link to={`/users/${user}`} className="mr-2">
-                                <Button variant="light" style={{ color: "white" }}>Profile for {user}</Button>
+                            <Link to={`/users/${user.Username}`} className="mr-2">
+                                <Button variant="light" style={{ color: "white" }}>Profile for {user.Username}</Button>
                             </Link>
                             <Button onClick={() => this.onLoggedOut()} variant="light" style={{ color: "white" }}>Logout</Button>
                         </Navbar.Collapse> 
@@ -138,7 +135,7 @@ class MainView extends React.Component {
                 if ( !user ) 
                 return (
                   <Col>
-                    <LoginView onLoggedIn={ (user) => this.onLoggedIn(user) } />
+                    <LoginView onLoggedIn={user => this.onLoggedIn(user) } />
                   </Col>
                 );
               if (movies.length === 0) return <div className="main-view" />;
@@ -158,7 +155,7 @@ class MainView extends React.Component {
                  if ( !user ) 
                  return (
                    <Col>
-                     <LoginView onLoggedIn={ (user) => this.onLoggedIn(user) } />
+                     <LoginView onLoggedIn={user => this.onLoggedIn(user) } />
                    </Col>
                  );
               if (movies.length === 0) return <div className="main-view" />;
@@ -175,21 +172,22 @@ class MainView extends React.Component {
               </Col> 
             }} />
 
-            <Route  path="/users" render={({ history }) => {
+            <Route  path="/users/:username" render={({ history }) => {
               if ( !user ) 
-              return (
-                <Col>
-                  <LoginView onLoggedIn={ (user) => this.onLoggedIn(user) } />
-                </Col>
-              );
+                return (
+                  <Col>
+                    <LoginView onLoggedIn={ (user) => this.onLoggedIn(user) } />
+                  </Col>
+                );
               if (movies.length === 0) return <div className="main-view" />;
-              return ( <Col>
-                <ProfileView
-               user = {user}
-               movies = {movies}
-                onBackClick={() => history.goBack()} />
-              </Col>
-              )
+                return ( <Col>
+                  <ProfileView
+                user = {user}
+                
+                movies = {movies}
+                  onBackClick={() => history.goBack()} />
+                </Col>
+                )
             }} />
                 </Row> 
               </Router>  
@@ -198,7 +196,7 @@ class MainView extends React.Component {
 }
 
 let mapStateToProps = state => {
-  return { movies: state.movies}
+  return { movies: state.movies, user: state.user }
 }
 
 export default connect(mapStateToProps, { setMovies, setUser } )(MainView);

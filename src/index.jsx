@@ -17,9 +17,9 @@ class MyFlixApplication extends React.Component {
   render() {
     return (
       <Provider store={store}>
-        <Container>
+        <div className='myHorror'>
           <MainView />
-        </Container>
+        </div>
       </Provider>
     );
   }

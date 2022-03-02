@@ -21,7 +21,7 @@ function movies(state = [], action) {
     }
 }
 
-function user(state= null, action) {
+function user(state = null, action) {
     switch(action.type) {
         case SET_USER:
             console.log('SET USER reducer triggered');

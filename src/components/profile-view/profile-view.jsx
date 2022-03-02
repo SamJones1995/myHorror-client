@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { useReducer } from 'react';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 import { Button, Card, Col, Form, Row, Container } from 'react-bootstrap';
 import { MovieCard } from '../movie-card/movie-card';
 import './profile-view.scss';
 import Modal from 'react-bootstrap/Modal';
-
-
+import { connect } from 'react-redux';
+import { setUser } from '../../actions/actions';
 
 export class ProfileView extends React.Component {
   constructor(props) {
@@ -14,15 +14,15 @@ export class ProfileView extends React.Component {
     this.state = {
         userDetails: [],
         validated: false,
-        Username: '',
+        Username: this.props.user.Username,
         Password: '',
-        email: '',
-        Birthdate: '',
+        email: this.props.user.email,
+        Birthdate: this.props.user.Birthdate,
         FavoriteMovies: [],
         modalState: false
     }
 
-    this.handleFieldChange = this.handleFieldChange.bind(this);
+        this.handleFieldChange = this.handleFieldChange.bind(this);
         this.updateUserDetails = this.updateUserDetails.bind(this);
         this.showModal = this.showModal.bind(this);
         this.closeModal = this.closeModal.bind(this);
@@ -32,10 +32,11 @@ export class ProfileView extends React.Component {
 
   componentDidMount() {
     let accessToken = localStorage.getItem('token');
-    this.getUserDetails(accessToken);
+   
   }
   
   getUserDetails(token) {
+      console.log(this.props.user);
     axios.get(`https://myhorrormovies.herokuapp.com/users/${this.props.user}`, {
         headers: { Authorization: `Bearer ${token}`}
     }).then(response => {
@@ -65,21 +66,24 @@ updateUserDetails(e) {
         axios.put(`https://myhorrormovies.herokuapp.com/users/${user}`, {
             Username: this.state.Username,
             Password: this.state.Password,
-            Email: this.state.email,
-            Birthday: this.state.Birthdate
+            email: this.state.email,
+            Birthdate: this.state.Birthdate
         }, {
             headers: { Authorization: `Bearer ${token}`}
-        }).then(response => {
+        }).then((response) => {
+           
             const data = response.data;
             // Update localStorage with the new username
             localStorage.setItem('user', data.Username);
             // Reload the page to make sure that the user can immediately start using their new details
+            alert('Profile updated');
             window.open(`/users/${data.Username}`, '_self');
         }).catch(error => {
             console.log('error updating user details')
         });
     }
 };
+
 handleFieldChange(event) {
     let {name, value} = event.target;
     this.setState({ [name]: value})
@@ -116,17 +120,22 @@ deleteUserDetails() {
 // Render function to display items on the DOM
 render() {
     // Get the props that were passed into this view and store them in appropriate variables
-    const { movies, onBackClick} = this.props;
+    const { movies, onBackClick, user} = this.props;
 
     // Section of code for getting the users Favorites (so that they can be displayed on the page)
     // I am aware that this probably isn't the best way/place to get this information, but I couldn't work out another way to do it
     // In hindsight, if I was writing this again I'd use a function component for ProfileView instead of a class component to make working with this information easier
     // First get the array of a user's Favorite movies (which was obtained from the initial GET request to the API)
-    let tempArray = this.state.FavoriteMovies;
+    
     // Get an empty array which will store all of the movie objects which match the Favorites list
     let FavoriteMoviesArray = [];
+
+    if (user && user.FavoriteMovies) {
+        FavoriteMoviesArray = movies.filter(movie => user.FavoriteMovies.includes(movie._id));
+    } else {
     // Filter the movies array (obtained from props) and only save those movies which match ID's from the list of the users Favorites
-    FavoriteMoviesArray = movies.filter(movie => tempArray.includes(movie._id));
+    FavoriteMoviesArray =[]
+    }
 
     return (
         <div className="profile_view">
@@ -146,13 +155,15 @@ render() {
                 </Modal.Footer>
             </Modal>
             {/* Card for displaying current user details */}
+            <Container>
+                
             <Card bg="secondary" text="light" border="light">
                 <Card.Body>
-                    <Card.Title className="text-center">Profile of {this.state.userDetails.Username}</Card.Title>
-                    <Card.Text><span className="profile_heading">Email: </span>{this.state.userDetails.email}</Card.Text>
+                    <Card.Title className="text-center">Profile of {user.Username}</Card.Title>
+                    <Card.Text><span className="profile_heading">Email: </span>{user.email}</Card.Text>
                     {/* Only display birthday section if a user has filled that out (since it's the only optional section) */}
-                    {this.state.userDetails.Birthdate && (
-                        <Card.Text><span className="profile_heading">Date of Birth: </span>{Intl.DateTimeFormat().format(new Date(this.state.userDetails.Birthdate))}</Card.Text>
+                    {user.Birthdate && (
+                        <Card.Text><span className="profile_heading">Date of Birth: </span>{Intl.DateTimeFormat().format(new Date(user.Birthdate))}</Card.Text>
                     )}
                 </Card.Body>
             </Card>
@@ -202,7 +213,7 @@ render() {
             </Card>
             {/* Section for Favorites */}
             <Card bg="secondary" text="light" border="light" align="center" style={{ color: "white" }}>
-                <Card.Title>{this.state.userDetails.Username}'s Favorites:</Card.Title>
+                <Card.Title>{user.Username}'s Favorites:</Card.Title>
             <Row>
                 {/* Iterate over the FavoriteMoviesArray and create a MovieCard component for each one */}
                 {/* At this stage, I don't have a way to remove a Favorite movie from the ProfileView page. It must be done from the MovieView page, although I will likely change this in the future */}
@@ -212,6 +223,8 @@ render() {
                     </Col>))}
             </Row>
             </Card>
+            
+            </Container>
         </div>
     );
 }
