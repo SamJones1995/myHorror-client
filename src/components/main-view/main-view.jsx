@@ -33,7 +33,13 @@ class MainView extends React.Component {
       }
     }
 
-      //updates default 'user' property to that of 'particular user' on log in
+      //
+    /**
+     * updates default 'user' property to that of 'particular user' on log in
+     *@function onLoggedIn
+     *@params authData
+     *@returns user data and token 
+    **/
     onLoggedIn(authData) {
       localStorage.setItem('token', authData.token);
       localStorage.setItem('user', authData.user.Username);
@@ -41,7 +47,12 @@ class MainView extends React.Component {
       this.props.setUser(authData.user);
         this.getMovies(authData.token);
     }
-    
+        /**
+     * gets user details from database with user from localStorage
+     *@function getUserDetails
+     *@params localStorage ('user')
+     *@returns user data in JSON format
+    **/
     getUserDetails() {
       let userLocalStorage = localStorage.getItem('user');
       let token = localStorage.getItem('token');
@@ -54,7 +65,12 @@ class MainView extends React.Component {
           console.log(error);
       });
   }
-
+    /**
+     *retrieves movie data from the database and sets it in this.props.setMovies
+     *@function getItem
+     *@params token
+     *@returns data for all movies
+    **/
     getMovies(token) {
       axios.get('https://myhorrormovies.herokuapp.com/horrorMovies', {
         headers: { Authorization: `Bearer ${token}`, "Cross-Origin-Resource-Policy": "cross-origin"}
@@ -68,7 +84,10 @@ class MainView extends React.Component {
         console.log(error);
       });
     } 
-
+    /**
+     *removes user data from localStorage and props on log out
+     *@function onLoggedOut
+    **/
     onLoggedOut() {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
