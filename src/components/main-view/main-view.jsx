@@ -112,12 +112,12 @@ class MainView extends React.Component {
                         </Link>
                     </Navbar.Brand>
                     {user && (
-                        <Navbar.Collapse className="justify-content-end">
+                        <Container expand="lg"  className="justify-content-end">
                             <Link to={`/users/${user.Username}`} className="mr-2">
                                 <Button variant="light" style={{ color: "white" }}>Profile for {user.Username}</Button>
                             </Link>
                             <Button onClick={() => this.onLoggedOut()} variant="light" style={{ color: "white" }}>Logout</Button>
-                        </Navbar.Collapse> 
+                        </Container> 
                     )}
                 </Navbar>
                 
