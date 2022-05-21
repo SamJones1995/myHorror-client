@@ -6,16 +6,8 @@
     "build": "parcel build src/index.html --public-url ./",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/SamJones1995/myHorror-client.git"
-  },
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/SamJones1995/myHorror-client/issues"
-  },
-  "homepage": "https://samjones1995.github.io/myHorror-client",
   "dependencies": {
     "axios": "^0.24.0",
     "parcel": "^2.0.0-rc.0",
