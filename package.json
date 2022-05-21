@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-        "build": "parcel build src/index.html --public-url ./",
+     "build:parcel": "parcel build src/index.html --public-url /",
+    "build": "npm run build:parcel && cp _redirects dist"
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
