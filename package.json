@@ -27,5 +27,8 @@
   "devDependencies": {
     "@parcel/transformer-sass": "^2.0.0-rc.0",
     "gh-pages": "^4.0.0"
+  },
+  "engines" : { 
+    "node" : ">=16.14.2"
   }
 }
