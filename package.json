@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "build-github": "rm -rf docs/* && parcel build src/index.html --public-url ./ -d docs",
+    "start": "parcel src/index.html — open",
+    "build": "parcel build src/index.html",
+    "heroku-postbuild": "parcel build src/index.html",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -11,6 +13,7 @@
   "dependencies": {
     "axios": "^0.24.0",
     "parcel": "^2.0.0-rc.0",
+    "parcel-bundler": "^2.0.0-rc.0",
     "prop-types": "^15.8.0",
     "react": "^17.0.2",
     "react-bootstrap": "^2.4.0",
