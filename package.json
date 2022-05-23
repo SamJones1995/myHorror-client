@@ -15,6 +15,10 @@
   },
   "author": "",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SamJones1995/myHorror-client/issues"
+  },
+  "homepage": "https://samjones1995.github.io/myHorror-client/",
   "dependencies": {
     "axios": "^0.24.0",
     "prop-types": "^15.8.0",
@@ -26,7 +30,6 @@
     "redux": "^4.1.2",
     "redux-devtools-extension": "^2.13.9"
   },
-  
   "devDependencies": {
     "@parcel/transformer-sass": "^2.5.0",
     "parcel": "^2.5.0",
