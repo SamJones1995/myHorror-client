@@ -16,3 +16,5 @@ Views summary is as follows:
 or remove the movie from a list of favorites in the movie details.
 
 --Users can click Profile in the upper right to access their favorites list and update any user information.
+
+live site: https://myhorror.netlify.app
